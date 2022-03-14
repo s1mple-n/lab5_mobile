@@ -1,12 +1,14 @@
 package com.example.lab5;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -17,6 +19,11 @@ public class FoodAdapter extends BaseAdapter {
     private int idLayout;
     private List<Food> listfood;
     private int positionSelect = -1;
+
+    public void setListfood(List<Food> listfood) {
+        this.listfood = listfood;
+        notifyDataSetChanged();
+    }
 
     public FoodAdapter(Context context, int idLayout, List<Food> listfood) {
         this.context = context;
@@ -59,25 +66,19 @@ public class FoodAdapter extends BaseAdapter {
         if(listfood!=null&&!listfood.isEmpty()){
             tvname.setText(food.getName());
             tvde.setText(food.getDecription());
-            tvpri.append(""+food.getPrice());
-            int idfood = food.getId();
-            switch (idfood){
-                case 1:
-                    imvfood.setImageResource(R.mipmap.donut_yellow);
-                    break;
-                case 2:
-                    imvfood.setImageResource(R.mipmap.tasty_donut);
-                    break;
-                case 3:
-                    imvfood.setImageResource(R.mipmap.green_donut);
-                    break;
-                case 4:
-                    imvfood.setImageResource(R.mipmap.donut_red);
-                    break;
-                default:
-                    break;
-            }
+            tvpri.setText("$"+food.getPrice());
+            imvfood.setImageResource(food.getId());
         }
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               Intent intent = new Intent(context,SecondActivity.class);
+               intent.putExtra("food",food);
+               context.startActivity(intent);
+
+            }
+        });
 
         return view;
     }
